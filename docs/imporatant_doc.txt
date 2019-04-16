@@ -2,3 +2,7 @@ Important links:
 stacking different models to increase prediction accuracy :
 1. https://www.kdnuggets.com/2017/02/stacking-models-imropved-predictions.html
 2. https://www.analyticsvidhya.com/blog/2018/06/comprehensive-guide-for-ensemble-models/
+
+gridsearch vs cross validation
+1. https://stackabuse.com/cross-validation-and-grid-search-for-model-selection-in-python/
+2. https://scikit-learn.org/stable/modules/cross_validation.html
