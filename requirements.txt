@@ -7,3 +7,4 @@ pandas==0.24.2
 xgboost==0.82
 mlxtend==0.15.0.0
 Keras==2.2.4
+graphviz==0.10.1
