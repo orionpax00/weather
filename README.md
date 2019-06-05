@@ -55,34 +55,38 @@ RegPip is a end to end pipeline for any regression problem, It can be fitted to 
 Highly tailored and tunned with different algorithms and data processing techniques to get better results
 
 Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should element DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue with the tag.
-
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
+* We have merged the all necessary steps into one pipeline so user does not have thing about what to do.
+* Easily implementable just copy or csv files into the data folder modify the code subsequently, modified step and well documented and commented.
+* Great visualization and almost every algorithm is coved in the scope
+ :smile:
 
 ### Built With
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
-* [Laravel](https://laravel.com)
+Completely with python and it's supporting libraries worth mentioning libraries and frameworks:
+* [Python](https://python.com)
+* [Jupyter notebook](https://jquery.com)
+* [Scikit learn](https://laravel.com)
+* [Tensorflow and Tensorboard](http://tensorflow.com)
+* [Xgboost](http://orionapx00.com)
+* [Matplotlib](h), [Pandas](h), [Numpy](h), [Seaborn](h)
 
 
 
 <!-- GETTING STARTED -->
 ## Getting Started
+There are two methods to run this project:
+1. [Docker container](#docker)
+2. [Virtualenv](#virtualenv)
+3. [Direct](#direct)
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+
+### Docker
+It the most preferred way to install and run the project in your local machine
 
 ### Prerequisites
+Docker is prerequisites and have to be installed firstly go to [here](shhs) to how to install docker
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
 ```sh
-npm install npm@latest -g
+docker run regpip:latest
 ```
 
 ### Installation
