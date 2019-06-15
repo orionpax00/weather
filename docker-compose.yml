@@ -1,0 +1,11 @@
+version: '1'
+
+services:
+  web:
+    build: .
+    command: bash -c "jupyter notebook --port 0.0.0.0:8888"
+    container_name: regpip
+    volumes:
+      - .:/regpip/
+    ports:
+      - "8888:8888"
