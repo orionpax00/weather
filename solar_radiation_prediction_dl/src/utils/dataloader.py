@@ -1,22 +1,33 @@
 import tensorflow as tf
 import pandas as pd
+import numpy as np
 
-TRAIN_SPLIT = 0.8
+TRAIN_SPLIT = 0.9
+START_INDEX = 0
 
+class getData(object):
 
-class getData:
-
-    def __init__(self,mainfile:str):
+    def __init__(self, mainfile:str, features_to_consider:list, \
+                    target:str, history:int, future_target:int, steps:int):
         self.MAIN_FILE_PATH = mainfile
         self.multivariate = True
         self.normalize = True
         self.df = pd.read_csv(self.MAIN_FILE_PATH)
         self.split = int(TRAIN_SPLIT * len(self.df))
+        self.features_to_consider = features_to_consider
+        self.target = target
+        self.history = history
+        self.steps = steps
+        self.target_size = future_target
+        self.start_index = START_INDEX
+        self.end_index = self.split
 
-    def _multivariate(self, features_to_consider:list):
+    def _multivariate(self,for_validation=False, single_step = False):
         
-        features = df[features_to_consider]
+        features = self.df[self.features_to_consider]
         features.index = self.df["index"]
+
+        target = self.df[self.target]
 
         dataset = features.values
         data_mean = dataset[:self.split].mean(axis = 0)
@@ -25,28 +36,32 @@ class getData:
         dataset = (dataset - data_mean)/data_std
 
         data = []
-        label = []
+        labels = []
 
-        start_index = start_index + history_size
+        self.start_index = self.start_index + self.history
 
-        if end_index is None:
-            end_index = len(dataset) - target_size
+        if for_validation:
+            self.start_index = self.split + self.history
+            self.end_index = len(dataset) - self.target_size
         
-        for i in range(start_index, end_index):
-            indices = range(i - history_size, i , steps)
+        for i in range(self.start_index, self.end_index):
+            indices = range(i - self.history, i , self.steps)
             data.append(dataset[indices])
 
             if single_step:
-                labels.append(target[i+target_size])
+                labels.append(target[i+self.target_size])
 
             else:
-                labels.append(target_size[i:i+target_size])
+                labels.append(target[i:i+self.target_size])
 
         return np.array(data), np.array(labels)
 
-    def call(self,multivariate=True, start_index, target, start_index, end_index, history_size, target_size, steps, single_step = False):
+    def call(self, for_validation=False, single_step = False, multivariate=True):
 
         if multivariate:
-            return self._multivariate(start_index, target, start_index, end_index, history_size, target_size, steps, single_step= False)
+            if for_validation:
+                return self._multivariate(for_validation=True, single_step = single_step)
+            else:
+                return self._multivariate(single_step = single_step)
 
 
