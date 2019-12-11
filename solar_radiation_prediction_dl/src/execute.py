@@ -1,11 +1,10 @@
-import pathlib
-import tempfile
-import shutil
+import os
 
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
 from utils.dataloader import getData
+from models.cnnlstm import cnnLSTM
 
 EVALUATION_INTERVAL = 200
 EPOCHS = 30
@@ -39,11 +38,16 @@ val_data = tf.data.Dataset.from_tensor_slices((x_val,y_val))
 val_data = val_data.batch(BATCH_SIZE).repeat()
 
 
-single_step_model = tf.keras.models.Sequential()
-single_step_model.add(tf.keras.layers.LSTM(32,
-                                           input_shape=x_train.shape[-2:]))
-single_step_model.add(tf.keras.layers.Dense(1))
+# single_step_model = tf.keras.models.Sequential()
+# single_step_model.add(tf.keras.layers.LSTM(32,
+#                                            input_shape=x_train.shape[-2:]))
+# single_step_model.add(tf.keras.layers.Dense(1))
 
+
+
+logdir = os.path.join(os.getcwd(),"tensorboard_logs")
+
+single_step_model = cnnLSTM(x_train.shape[-2:])
 single_step_model.compile(optimizer=tf.keras.optimizers.RMSprop(), loss='mae')
 
 
@@ -52,7 +56,7 @@ single_step_model.compile(optimizer=tf.keras.optimizers.RMSprop(), loss='mae')
 def get_callbacks(name):
   return [
     tf.keras.callbacks.EarlyStopping(monitor='val_binary_crossentropy', patience=200),
-    tf.keras.callbacks.TensorBoard(logdir/name),
+    tf.keras.callbacks.TensorBoard(logdir),
   ]
 
 
