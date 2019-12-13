@@ -11,7 +11,7 @@ def logger(model_name, date_time, csvlogger = True, tensorboard=True):
     callbacks_list = []
 
     if csvlogger:
-        CSV_PATH = os.path.join(BASE_RESULT_DIR , "csvlogs" , model_name+ "_" + date_time + ".log")
+        CSV_PATH = os.path.join(BASE_RESULT_DIR , "csvlogs" , model_name+ "_" + date_time + ".csv")
         csv_logger = callbacks.CSVLogger(CSV_PATH)
         callbacks_list.append(csv_logger)
     if tensorboard:

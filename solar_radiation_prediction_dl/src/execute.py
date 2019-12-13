@@ -56,11 +56,11 @@ single_step_model.compile(optimizer=tf.keras.optimizers.RMSprop(), loss='mae')
 
 
 
-# single_step_model.fit(train_data, epochs=EPOCHS,
-#                           steps_per_epoch=EVALUATION_INTERVAL,
-#                           validation_data=val_data,
-#                           validation_steps=50,
-#                           callbacks=logger("basic_lstmcnn",DATE_TIME))
+single_step_model.fit(train_data, epochs=EPOCHS,
+                          steps_per_epoch=EVALUATION_INTERVAL,
+                          validation_data=val_data,
+                          validation_steps=50,
+                          callbacks=logger("basic_lstmcnn",DATE_TIME))
 
 
 x_test, data_mean, data_std = data.testdata(single_step = True)
