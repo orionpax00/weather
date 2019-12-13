@@ -8,14 +8,13 @@ START_INDEX = 0
 class getData(object):
 
     def __init__(self, mainfile:str, features_to_consider:list, \
-                    target:str, history:int, future_target:int, steps:int):
+                 history:int, future_target:int, steps:int):
         self.MAIN_FILE_PATH = mainfile
         self.multivariate = True
         self.normalize = True
         self.df = pd.read_csv(self.MAIN_FILE_PATH)
         self.split = int(TRAIN_SPLIT * len(self.df))
         self.features_to_consider = features_to_consider
-        self.target = target
         self.history = history
         self.steps = steps
         self.target_size = future_target
@@ -25,20 +24,27 @@ class getData(object):
     def _multivariate(self,for_validation=False, single_step = False):
         
         features = self.df[self.features_to_consider]
-        features.index = self.df["index"]
-
-        target = self.df[self.target]
+        # features.index = self.df["index"]
 
         dataset = features.values
+
+        #normalize using text data
         data_mean = dataset[:self.split].mean(axis = 0)
         data_std = dataset[:self.split].std(axis=0)
 
+        #normalize using the whole
+        # data_mean = dataset.mean(axis = 0)
+        # data_std = dataset.std(axis=0)
+
         dataset = (dataset - data_mean)/data_std
+
+        target = dataset[:,-1]
 
         data = []
         labels = []
 
         self.start_index = self.start_index + self.history
+
 
         if for_validation:
             self.start_index = self.split + self.history
@@ -63,5 +69,43 @@ class getData(object):
                 return self._multivariate(for_validation=True, single_step = single_step)
             else:
                 return self._multivariate(single_step = single_step)
+
+
+
+    def testdata(self,single_step):
+
+        features = self.df[self.features_to_consider]
+        dataset = features.values
+
+        #normalize using text data
+        data_mean = dataset[:self.split].mean(axis = 0)
+        data_std = dataset[:self.split].std(axis=0)
+
+        #normalize using the whole
+        # data_mean = dataset.mean(axis = 0)
+        # data_std = dataset.std(axis=0)
+
+        dataset = (dataset - data_mean)/data_std
+
+        data = []
+        labels = []
+
+        target = dataset[:,-1]
+        if single_step:
+            start_index = len(dataset) - self.history - self.target_size
+            end_index = len(dataset) - self.target_size
+            data.append(dataset[start_index:end_index])
+            labels.append(target[-1])
+        
+        else:
+            start_index = len(dataset) - self.history - self.target_size
+            end_index = len(dataset) - self.target_size
+            data.append(dataset[start_index:end_index])
+            labels.append(target[-self.target_size:])
+        
+        test_data = tf.data.Dataset.from_tensor_slices((data,labels))
+        test_data = test_data.batch(1)
+
+        return test_data, data_mean, data_std
 
 
