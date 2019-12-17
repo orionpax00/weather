@@ -29,8 +29,11 @@ Using the one FDN with 12 Xgboosts the RSME was tremendiously decresed from **10
 ![img](results.png)
 
 </center>
+
 ## Model Architecture and Parameters
+
 ### Xgboost
+
 Parameter | Value
 --- | ---
 learning_rate|0.4
