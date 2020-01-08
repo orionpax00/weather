@@ -7,13 +7,13 @@ import matplotlib.pyplot as plt
 from utils.dataloader import getData
 from utils.callbacks import *
 from misc.misc import *
-from models.cnnlstm import lstmCNN
+from models.full_attention_lstmcnn import lstmCNN
 
 tf.keras.backend.clear_session()
 
 MODEL_NAME = "basic_lstmCNN"
-EVALUATION_INTERVAL = 20
-EPOCHS = 1
+EVALUATION_INTERVAL = 200
+EPOCHS = 25
 
 BATCH_SIZE = 16
 BUFFER_SIZE = 50
@@ -22,9 +22,9 @@ PAST_HISTORY = 20
 FUTURE_TARGET = 1
 STEPS = 1
 MAIN_FILE = ".\\data\\main\\main.csv"
-FEATURES = ["Solar Radiation",  "MAX Temp", \
-                    "Vapour press", "PM2.5"]
-TARGET = "wind speed"
+FEATURES = ["index", "MN",  "MAX Temp", "Sunshine hour", "MAX Temp",".RH", "mean sea LP", \
+                    "Vapour press", "PM2.5", "Solar Radiation"] ## Always put target class in the end
+TARGET = "Solar Radiation"
 FEATURES.append(TARGET)
 DATE_TIME = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
 
@@ -51,7 +51,7 @@ val_data = val_data.batch(BATCH_SIZE).repeat()
 logdir = os.path.join(os.getcwd(),"tensorboard_logs")
 
 single_step_model = lstmCNN(x_train.shape[-2:])
-single_step_model.compile(optimizer=tf.keras.optimizers.RMSprop(), loss='mae')
+single_step_model.compile(optimizer=tf.keras.optimizers.RMSprop(), loss='mse', metrics=['mse','mae','mape'])
 
 
 
@@ -59,7 +59,7 @@ single_step_model.compile(optimizer=tf.keras.optimizers.RMSprop(), loss='mae')
 single_step_model.fit(train_data, epochs=EPOCHS,
                           steps_per_epoch=EVALUATION_INTERVAL,
                           validation_data=val_data,
-                          validation_steps=50,
+                          validation_steps=200,
                           callbacks=logger("basic_lstmcnn",DATE_TIME))
 
 

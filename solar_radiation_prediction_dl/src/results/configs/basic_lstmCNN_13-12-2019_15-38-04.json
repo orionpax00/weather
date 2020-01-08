@@ -1,1 +1,0 @@
-{"MODEL_NAME": "basic_lstmCNN", "EVALUATION_INTERVAL": 20, "EPOCHS": 1, "BATCH_SIZE": 16, "BUFFER_SIZE": 50, "PAST_HISTORY": 20, "FUTURE_TARGET": 1, "STEPS": 1, "MAIN_FILE": ".\\data\\main\\main.csv", "FEATURES": ["Solar Radiation", "MAX Temp", "Vapour press", "PM2.5", "wind speed"], "TARGET": "wind speed", "DATE_TIME": "13-12-2019_15-38-04"}

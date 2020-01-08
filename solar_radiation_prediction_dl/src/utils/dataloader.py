@@ -94,8 +94,12 @@ class getData(object):
         if single_step:
             start_index = len(dataset) - self.history - self.target_size
             end_index = len(dataset) - self.target_size
-            data.append(dataset[start_index:end_index])
-            labels.append(target[-1])
+            
+            for i in range(start_index, end_index):
+                indices = range(i - self.history, i , self.steps)
+                data.append(dataset[indices])
+                # data.append(dataset[start_index:end_index])
+                labels.append(target[i+self.target_size])
         
         else:
             start_index = len(dataset) - self.history - self.target_size
