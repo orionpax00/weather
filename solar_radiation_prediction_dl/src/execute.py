@@ -7,24 +7,30 @@ import matplotlib.pyplot as plt
 from utils.dataloader import getData
 from utils.callbacks import *
 from misc.misc import *
-from models.full_attention_lstmcnn import lstmCNN
+from models.lstm import LSTM
 
 tf.keras.backend.clear_session()
 
-MODEL_NAME = "basic_lstmCNN"
-EVALUATION_INTERVAL = 200
+MODEL_NAME = "cnn"
+EVALUATION_INTERVAL = 202
 EPOCHS = 25
 
-BATCH_SIZE = 16
-BUFFER_SIZE = 50
+BATCH_SIZE = 256
+BUFFER_SIZE = 10000
 
 PAST_HISTORY = 20
 FUTURE_TARGET = 1
 STEPS = 1
-MAIN_FILE = ".\\data\\main\\main.csv"
-FEATURES = ["index", "MN",  "MAX Temp", "Sunshine hour", "MAX Temp",".RH", "mean sea LP", \
-                    "Vapour press", "PM2.5", "Solar Radiation"] ## Always put target class in the end
-TARGET = "Solar Radiation"
+MAIN_FILE = ".\\data\\main\\SRRL6.csv"
+
+## features for dataset 1
+# FEATURES = ["index", "MN",  "MAX Temp", "Sunshine hour", "MAX Temp",".RH", "mean sea LP", \
+#                     "Vapour press", "PM2.5", "Solar Radiation"] ## Always put target class in the end
+
+## features for dataset 2
+FEATURES = ["Avg Global Solar Radiation [W/m^2]", " Temp [deg C]",  "Avg Station Pressure [mBar]", "Avg Wind Speed ", " RH [%]"] ## Always put target class in the end
+
+TARGET = " RH [%]"
 FEATURES.append(TARGET)
 DATE_TIME = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
 
@@ -50,7 +56,7 @@ val_data = val_data.batch(BATCH_SIZE).repeat()
 
 logdir = os.path.join(os.getcwd(),"tensorboard_logs")
 
-single_step_model = lstmCNN(x_train.shape[-2:])
+single_step_model = LSTM(x_train.shape[-2:])
 single_step_model.compile(optimizer=tf.keras.optimizers.RMSprop(), loss='mse', metrics=['mse','mae','mape'])
 
 
@@ -59,8 +65,8 @@ single_step_model.compile(optimizer=tf.keras.optimizers.RMSprop(), loss='mse', m
 single_step_model.fit(train_data, epochs=EPOCHS,
                           steps_per_epoch=EVALUATION_INTERVAL,
                           validation_data=val_data,
-                          validation_steps=200,
-                          callbacks=logger("basic_lstmcnn",DATE_TIME))
+                          validation_steps=202,
+                          callbacks=logger(MODEL_NAME,DATE_TIME))
 
 
 x_test, data_mean, data_std = data.testdata(single_step = True)

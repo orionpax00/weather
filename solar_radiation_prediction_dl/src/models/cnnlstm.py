@@ -1,31 +1,15 @@
 import json
 import tensorflow as tf
 
-class AttentionModule(tf.keras.layers.Layer):
-    """
-        This layer is the implementation of Simple History attention LSTM
-    """
-    
-    def __init__(self, history):
-        super(AttentionModule, self).__init__()
-        self.history_size = history
-        
-    def build(self,input_shape):
-        self.kernel = self.add_weight("kernel", shape=[self.history_size, self.history_size])
-        
-    def call(self, input_tensor):
-        attended_weights = tf.nn.softmax(tf.nn.tanh(tf.matmul(self.kernel, input_tensor)))
-        attended_input = tf.multiply(attended_weights, input_tensor)
 
-        return attended_input
 
-class lstmCNN(tf.keras.Model):
+class cnnlstm(tf.keras.Model):
     """
         base cnn lstm model
     """
 
     def __init__(self, input_shape):
-        super(lstmCNN, self).__init__(name="")
+        super(cnnlstm, self).__init__(name="")
         self.input_shape_ = input_shape
 
         ##lstm model
@@ -45,12 +29,10 @@ class lstmCNN(tf.keras.Model):
         self.dense1 = tf.keras.layers.Dense(2048)
         self.dense2 = tf.keras.layers.Dense(1024)
         self.dense3 = tf.keras.layers.Dense(1)
-        self.attention = AttentionModule(self.input_shape_[-2])
 
     def call(self,input_tensor):
         
         x = self.lstm1(input_tensor)
-        # x = self.lstm2(x)
         x = self.reshape1(x)
         x = self.conv1(x)
         x = self.maxpool1(x)

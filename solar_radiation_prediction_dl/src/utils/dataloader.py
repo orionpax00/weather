@@ -92,7 +92,7 @@ class getData(object):
 
         target = dataset[:,-1]
         if single_step:
-            start_index = len(dataset) - self.history - self.target_size
+            start_index = len(dataset) - 20 * self.history - self.target_size
             end_index = len(dataset) - self.target_size
             
             for i in range(start_index, end_index):
